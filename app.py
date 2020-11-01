@@ -1,10 +1,18 @@
 import streamlit as st
 from PIL import Image
+from matplotlib import pyplot as plt
+from gluoncv import model_zoo, data, utils
+from gluoncv.data.transforms.pose import detector_to_alpha_pose, heatmap_to_coord_alpha_pose
 
 @st.cache
 def load_image(image_file):
 	img = Image.open(image_file)
 	return img
+
+@st.cache(allow_output_mutation=True)
+def load_model(model_name):
+	model = model_zoo.get_model(model_name, pretrained = True)
+	return model
 
 def main():
   
@@ -26,6 +34,14 @@ def main():
 		image = rgb_im.save("saved_image.jpg")
 		image_path = "saved_image.jpg"
 		st.image(image1)
+
+	if st.button("Run Model"):
+		st.warning("Loading Model..🤞")
+		detector = load_model('yolo3_mobilenet1.0_coco')
+		pose_net = load_model('alpha_pose_resnet101_v1b_coco')
+		detector.reset_class(["person"], reuse_weights=['person'])
+		st.success("Loaded Model Succesfully!!🤩👍")
+
 
 if __name__== "__main__":
 	main()
