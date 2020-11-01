@@ -14,13 +14,29 @@ def load_model(model_name):
 	model = model_zoo.get_model(model_name, pretrained = True)
 	return model
 
+def plot_image(detector,pose_net, x, img):
+	st.warning("Inferencing from Model..")
+	class_IDs, scores, bounding_boxs = detector(x)
+	pose_input, upscale_bbox = detector_to_alpha_pose(img,class_IDs,scores,bounding_boxs)
+	predicted_heatmap = pose_net(pose_input)
+	pred_coords, confidence = heatmap_to_coord_alpha_pose(predicted_heatmap, upscale_bbox)
+    
+	fig = plt.figure(figsize=(10, 10))
+	ax = utils.viz.plot_keypoints(img, pred_coords, confidence,
+                              class_IDs, bounding_boxs, scores,
+                              box_thresh=0.5, keypoint_thresh=0.2)
+	st.set_option('deprecation.showPyplotGlobalUse', False)
+	st.success("Pose Estimation Successful!! Plotting Image..")
+	st.pyplot(plt.show())
+
+
 def main():
   
 	st.title("Pose Estimation App for Images")
 	st.text("Built with gluoncv and Streamlit")
 	st.markdown("### [Pose Estimation](https://towardsdatascience.com/human-pose-estimation-simplified-6cfd88542ab3)\
      `            `[Alpha Pose](https://medium.com/beyondminds/an-overview-of-human-pose-estimation-with-deep-learning-d49eb656739b) \
-		 [[Paper]](https://arxiv.org/abs/1612.00137)\
+	 `			  `[[Paper]](https://arxiv.org/abs/1612.00137)\
      `            `[[View Source]](https://github.com/Hardly-Human/Instance-Segmentation-of-Images)")
 
 	image_file = st.file_uploader("Upload Image", type = ['jpg','png','jpeg'])
@@ -42,6 +58,8 @@ def main():
 		detector.reset_class(["person"], reuse_weights=['person'])
 		st.success("Loaded Model Succesfully!!🤩👍")
 
+		x, img = data.transforms.presets.yolo.load_test(image_path, short=512)
+		plot_image(detector,pose_net,x,img)
 
 if __name__== "__main__":
 	main()
