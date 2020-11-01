@@ -1,0 +1,6 @@
+streamlit
+Pillow
+mxnet
+gluoncv
+matplotlib
+numpy
