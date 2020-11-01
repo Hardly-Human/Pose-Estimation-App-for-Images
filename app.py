@@ -29,6 +29,17 @@ def plot_image(detector,pose_net, x, img):
 	st.success("Pose Estimation Successful!! Plotting Image..")
 	st.pyplot(plt.show())
 
+def footer():
+	st.markdown("""
+	* * *
+	Built with ❤️ by [Rehan uddin](https://hardly-human.github.io/)
+	""")
+	st.success("Rehan uddin (Hardly-Human)👋😉")
+
+
+################################################################################
+# main()
+################################################################################
 
 def main():
   
@@ -37,7 +48,7 @@ def main():
 	st.markdown("### [Pose Estimation](https://towardsdatascience.com/human-pose-estimation-simplified-6cfd88542ab3)\
      `            `[Alpha Pose](https://medium.com/beyondminds/an-overview-of-human-pose-estimation-with-deep-learning-d49eb656739b) \
 	 `			  `[[Paper]](https://arxiv.org/abs/1612.00137)\
-     `            `[[View Source]](https://github.com/Hardly-Human/Instance-Segmentation-of-Images)")
+     `            `[[View Source]](https://github.com/Hardly-Human/Pose-Estimation-App-for-Images)")
 
 	image_file = st.file_uploader("Upload Image", type = ['jpg','png','jpeg'])
 
@@ -63,3 +74,4 @@ def main():
 
 if __name__== "__main__":
 	main()
+	footer()
