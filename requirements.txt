@@ -4,3 +4,4 @@ Pillow
 mxnet
 gluoncv
 matplotlib
+opencv-python
